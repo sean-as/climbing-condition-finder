@@ -18,7 +18,7 @@ A data pipeline and dashboard that answers "is Bishop climbable this weekend?", 
 
 ---
 
-## Diagram
+## Dataflow Diagram
 
 ```mermaid
 flowchart TD
@@ -127,8 +127,8 @@ flowchart TD
 | 4 | Deploy Airflow to cloud so it's updated more regularly. Add source for actualy temperature, humidity readings to compare models to forecast. | TODO
 | 5 | Deploy UI to cloud run and set up appropriately in Terraform. | TODO
 
-Additional things to consider: 
-- FastAPI is slow with BQ queriy: BQ is meant for analytics so there is a couple second latency with page loading. Caching helps but alternatives are better. Things to consider: BQ to DuckDB file (could use up a lot of memory), Redis and Firestore (potentially overkill)
+Considerations: 
+- FastAPI is slow with BQ queriy: BQ is meant for analytics so there is a couple second latency with page loading. Caching helps but alternatives are better. Things to consider: BQ to DuckDB file (could use up a lot of memory), Redis and Firestore (potentially overkill). 
 
 
 
