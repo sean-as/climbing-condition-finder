@@ -1,4 +1,4 @@
-# Climbing Conditions
+# Climbing Condition Finder
 
 ## Overview
 
@@ -10,6 +10,11 @@ A data pipeline and dashboard that answers "is Bishop climbable this weekend?", 
 - **Data Warehouse:** BigQuery 
 - **Transformations:** dbt 
 - **Dashboard:** FastAPI, ChartJS
+
+## Projects Strucutre
+- **airflow**: Contains the airflow and dbt code
+- **ui**: Contains the FastAPI App to for the UI
+- **terraform**: contains the infrastructure that is created
 
 ---
 
