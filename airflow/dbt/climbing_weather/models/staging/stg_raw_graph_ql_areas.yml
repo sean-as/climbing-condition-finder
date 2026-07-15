@@ -1,0 +1,27 @@
+models:
+  - name: stg_raw_graph_ql_areas
+    description: "One row per area available in Open Beta. "
+    columns:
+      - name: id
+        description: "Unique identifier for the area"
+      - name: area_name
+        description: "The name of the climbing area."
+      - name: latitude
+        description: "The approximate latitude coordinate for the area."
+      - name: longitude
+        description: "The approximate latitude coordinate for the area"
+      - name: children
+        description: "The associated children areas for a particulare area"
+      - name: ancestors
+        description: "The associated parent areas for a particulare area" 
+      - name: path_array
+        description: "Hierarchial list of areas from the root to the current area."
+      - name: is_leaf
+        description: "True if the area is a terminal node (a crag with routes and no child areas); false if it is a parent area that only contains sub-areas."
+    tests:
+      - dbt_utils.expression_is_true:
+          name: ancestors_last_element_is_self
+          arguments: 
+            expression: "ancestors[SAFE_OFFSET(ARRAY_LENGTH(ancestors) - 1)] = id"
+
+      

@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>{{ node.area_name }}</title></head>
+<body>
+  {% if node.parent_id %}
+    <a href="/area/{{ node.parent_id }}">← up</a>
+  {% endif %}
+  <h1>{{ node.area_name }}</h1>
+  <ul>
+    {% for c in children %}
+      <li><a href="/area/{{ c.id }}">{{ c.area_name }}</a></li>
+    {% endfor %}
+  </ul>
+</body>
+</html>

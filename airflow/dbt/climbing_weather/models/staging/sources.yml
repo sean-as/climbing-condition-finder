@@ -1,0 +1,14 @@
+version: 2
+
+# Try using these source definitions instead!
+sources:
+  - name: raw_data
+    schema: "{{ target.schema }}"
+    description: Raw Data for Climbing Weather
+    tables:
+      - name: raw_nws
+        description: One record per location and updated hourly forecast per hour. 
+      - name: raw_graph_ql_countries
+        description: One record per counry found in the Open Beta Graph QL. 
+      - name: raw_graph_ql_areas
+        description: One record per area found in the Open Beta Graph QL. 

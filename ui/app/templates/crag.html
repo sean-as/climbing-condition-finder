@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crag Forecast</title>
+  <style>
+    #charts { max-width: 720px; }
+    .chart-box { height: 130px; margin-bottom: 10px; }
+  </style>
+</head>
+<body data-area-id="{{ area_id }}">
+  <h1 id="area-name">{{ node.area_name }}</h1>
+  <div id="charts"></div>
+  <div id="error" hidden></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script src="/static/crag.js"></script>
+</body>

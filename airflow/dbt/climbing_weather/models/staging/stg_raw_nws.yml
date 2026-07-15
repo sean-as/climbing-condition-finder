@@ -1,0 +1,48 @@
+models:
+  - name: stg_raw_nws
+    description: "One row per gridpoint per hourly forecast period from NWS."
+    columns:
+      - name: geo_json
+        description: "Gridpoint cell polygon (GeoJSON) — spatial join key to areas."
+      - name: generated_at
+        description: "When NWS generated this forecast."
+      - name: extracted_at_ts
+        description: "When the row was ingested (forecast_made_at for snapshotting)."
+      - name: valid_period
+        description: "NWS validTimes window the forecast covers."
+      - name: elevation_value
+        description: "Gridpoint elevation."
+      - name: elevation_unit
+        description: "Elevation unit, typically wmoUnit:m."
+      - name: start_time
+        description: "Start of the hourly period (UTC)."
+        tests: [not_null]
+      - name: end_time
+        description: "End of the hourly period (UTC)."
+      - name: temperature_value
+        description: "Forecast temperature (NWS returns Fahrenheit)."
+        tests: [not_null]
+      - name: temperature_unit
+        description: "Temperature unit ('F')."
+      - name: precipitation_probability_value
+        description: "Probability of precipitation (percent)."
+      - name: precipitation_probability_unit
+        description: "PoP unit, typically wmoUnit:percent."
+      - name: dewpoint_value
+        description: "Forecast dewpoint."
+      - name: dewpoint_unit
+        description: "Dewpoint unit, typically wmoUnit:degC."
+      - name: relative_humidity_value
+        description: "Forecast relative humidity (percent)."
+      - name: relative_humidity_unit
+        description: "Humidity unit, typically wmoUnit:percent."
+      - name: wind_speed_low
+        description: "Low end of forecast wind speed (=high when single value)."
+      - name: wind_speed_high
+        description: "High end of forecast wind speed — the climbing-relevant value."
+      - name: wind_speed_unit
+        description: "Wind speed unit (e.g. 'mph')."
+      - name: wind_direction
+        description: "Wind direction as compass string (e.g. 'NW')."
+      - name: short_forecast
+        description: "Short text summary (e.g. 'Mostly Sunny')."

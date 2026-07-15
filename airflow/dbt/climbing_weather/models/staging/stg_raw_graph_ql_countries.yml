@@ -1,0 +1,6 @@
+models:
+  - name: stg_raw_graph_ql_countries
+    description: "One row per country available in Open Beta"
+    columns:
+      - name: country
+        description: "Country names."

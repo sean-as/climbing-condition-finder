@@ -1,0 +1,42 @@
+# Local config
+.env
+.env.*
+
+# Poetry
+poetry.lock
+
+# Terraform  (keep .terraform.lock.hcl)
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+
+# Python
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.venv/
+venv/
+
+# Airflow
+logs/
+airflow.db
+airflow-webserver.pid
+standalone_admin_password.txt
+
+# dbt
+target/
+dbt_packages/
+.user.yml
+profiles.yml
+
+# macOS
+.DS_Store
+
+# Claude
+.claude
+
+# Defensive: GCP keys
+*-key.json
+*credentials*.json

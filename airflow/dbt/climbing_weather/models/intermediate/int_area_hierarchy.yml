@@ -1,0 +1,23 @@
+models:
+  - name: int_area_hierarchy
+    description: "One row per area available in Open Beta. "
+    columns:
+      - name: id
+        description: "Unique identifier for the area"
+      - name: area_name
+        description: "The name of the climbing area."
+      - name: latitude
+        description: "The approximate latitude coordinate for the area."
+      - name: longitude
+        description: "The approximate latitude coordinate for the area"
+      - name: parent_id
+        description: "The parent id of this area."
+      - name: country
+        description: "The country the area is located in." 
+      - name: region
+        description: "The region the area is in, for USA this is typically States but for others it may be generic regions."
+      - name: is_leaf
+        description: "True if the area is a terminal node (a crag with routes and no child areas); false if it is a parent area that only contains sub-areas."
+
+
+      
