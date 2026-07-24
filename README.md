@@ -41,8 +41,8 @@ flowchart TD
         GCS2["raw_api/open_meteo/YYYY/MM/DD/"]
         GCS3["raw_api/openweathermap/YYYY/MM/DD/"]
         GCS4["raw_api/nws/YYYY/MM/DD/"]
-        GCS5["raw_api/graph_ql/ingest_graphql_areas_*"]
-        GCS6["raw_api/graph_ql/ingest_graphql_countries_*"]
+        GCS5["raw_api/open_beta/ingest_open_beta_areas_*"]
+        GCS6["raw_api/open_beta/ingest_open_beta_countries_*"]
     end
 
     subgraph BQ_Raw["BigQuery — Raw Tables"]
@@ -51,15 +51,15 @@ flowchart TD
         BQR3["raw_owm"]
         BQR4["raw_actuals"]
         BQR5["raw_gridpoints"]
-        BQR6["raw_graph_ql_areas"]
-        BQR7["raw_graph_ql_countries"]
+        BQR6["raw_open_beta_areas"]
+        BQR7["raw_open_beta_countries"]
     end
 
     subgraph DBT_Staging["dbt — Staging"]
         STG1["stg_raw_nws"]
         STG2["stg_actuals\n(normalized observations)"]
-        STG3["stg_raw_graph_ql_areas\n(locations + metadata)"]
-        STG4["stg_raw_graph_ql_countries\n(locations + metadata)"]
+        STG3["stg_raw_open_beta_areas\n(locations + metadata)"]
+        STG4["stg_raw_open_beta_countries\n(locations + metadata)"]
     end
     
     subgraph DBT_Intermediate["dbt — Intermediate"]
@@ -122,7 +122,7 @@ flowchart TD
 | Phase | Deliverable | Status
 |---|---|---|
 | 1 | Run airflow locally using docker, set up intiial DBT models for NWS data and create condition_score, learn more about FastAPI to begin setting up UI | DONE
-| 2 | Updated models to be incremental (forecast and areas). Remove get_distinct_gridpoints from ingestion of NWS to reduce BQ calls. Ensure naming patterns are aligned, rename graph_ql to openbeta.  Refine Charts in UI to make them more useable. Enable DBT to run in airflow. Resolve any other TODOs in codebase. | IN-PROGESS
+| 2 | Updated models to be incremental (forecast and areas). Remove get_distinct_gridpoints from ingestion of NWS to reduce BQ calls. Ensure naming patterns are aligned, rename openbeta to open_beta.  Refine Charts in UI to make them more useable. Enable DBT to run in airflow. Resolve any other TODOs in codebase. | IN-PROGRESS
 | 3 | Add unit tests for airflow. Add second source Open Weather API. | TODO
 | 4 | Deploy Airflow to cloud so it's updated more regularly. Add source for actualy temperature, humidity readings to compare models to forecast. | TODO
 | 5 | Deploy UI to cloud run and set up appropriately in Terraform. | TODO

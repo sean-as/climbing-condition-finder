@@ -15,7 +15,7 @@ class NwsHook(BaseHook):
         self.point_location_api = point_location_api
         self.grid_point_api = grid_point_api
     
-    def resolve_gridpoint(self, area_id, lat, long): 
+    def resolve_gridpoint(self, area_id, lat, long) -> dict: 
         url = f"{self.point_location_api}{lat},{long}"
         try:
             response = requests.get(url)
@@ -30,15 +30,15 @@ class NwsHook(BaseHook):
              self.log.exception(f"NWS point location request failed for lat={lat}, long={long}")
              raise
             
-    def get_hourly_forecast(self, grid_id, grid_x, grid_y):
+    def get_hourly_forecast(self, grid_id, grid_x, grid_y, area_id) -> dict: 
         url = f"{self.grid_point_api}{grid_id}/{grid_x},{grid_y}/forecast/hourly"
         try:
             response = requests.get(url)
             response.raise_for_status()
             data = response.json()
-            self.log.info(f"Succesfully fetched forecast for ...")
+            self.log.info(f"Succesfully fetched forecast for area_id: {area_id}")
         # TODO Catch KeyError or TypeError, catch no forecast
-            return json.dumps({"data": data, "extracted_at_ts": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')})
+            return {"data": data, "extracted_at_ts": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), "area_id": area_id}
         except requests.exceptions.RequestException: 
              self.log.exception(f"NWS forecast request failed for grid_id={grid_id}, grid_x={grid_x}, grid_y={grid_y}")
              raise

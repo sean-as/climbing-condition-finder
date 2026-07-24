@@ -8,17 +8,16 @@ import json
 
 class GraphqlHook(BaseHook): 
     
-    source_name = "graph_ql"
     # TODO make this config driven to allow for other sources
     endpoint = 'https://api.openbeta.io'
-    def __init__(self, source_name: str = source_name, endpoint: str = endpoint, auth_key = None,  *args, **kwargs):
+    def __init__(self,endpoint: str = endpoint, source_name=None, auth_key = None,  *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.source_name = source_name
         self.endpoint = endpoint
         self.auth_key = auth_key
 
 
-    def get_countries(self): 
+    def get_countries(self) -> list: 
         COUNTRIES_QUERY = """
         query GetCountries {
         countries {
@@ -35,14 +34,13 @@ class GraphqlHook(BaseHook):
                 )
             response.raise_for_status()
             contries = response.json().get("data", {}).get("countries", [])
-            self.log.info(contries)
-            return "\n".join(json.dumps(obj) for obj in contries)
+            return contries
 
         except requests.exceptions.RequestException: 
             self.log.exception(f"Request Exception: Unable to fetch countries from Open Beta")
             raise
 
-    def get_areas(self): 
+    def get_areas(self) -> list: 
         import time, random
         AREAS_QUERY = """
             query GetAreas($limit: Int!, $offset: Int!) {
@@ -104,4 +102,4 @@ class GraphqlHook(BaseHook):
                 self.log.exception(response.text)
                 self.log.exception(f"Request Exception: Unable to fetch areas from Open Beta")
                 raise
-        return "\n".join(json.dumps(obj) for obj in area_list)
+        return area_list

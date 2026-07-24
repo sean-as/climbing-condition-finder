@@ -1,5 +1,5 @@
 with
-    source as (select * from {{ ref("stg_raw_graph_ql_areas") }}),
+    source as (select * from {{ ref("stg_raw_open_beta_areas") }}),
     hierarchy as (
         select
             id,

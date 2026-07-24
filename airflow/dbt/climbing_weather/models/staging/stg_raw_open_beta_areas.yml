@@ -1,5 +1,5 @@
 models:
-  - name: stg_raw_graph_ql_areas
+  - name: stg_raw_open_beta_areas
     description: "One row per area available in Open Beta. "
     columns:
       - name: id

@@ -22,16 +22,6 @@ def get_target_crags():
     rows = hook.get_records(sql)          # list of tuples
     return [{"area_id": str(r[0]), "lat": str(r[1]), "long": str(r[2])} for r in rows]
 
-@task
-def get_distinct_gridpoints():
-    sql = """
-        select distinct grid_id, grid_x, grid_y
-        from `climbing_weather.raw_gridpoints`
-    """
-    hook = BigQueryHook(gcp_conn_id="google_cloud_default", use_legacy_sql=False, location="US")
-    rows = hook.get_records(sql)
-    return [{"grid_id": r[0], "grid_x": int(r[1]), "grid_y": int(r[2])} for r in rows]
-
 @dag(
     dag_id = 'raw_forecast_to_gcs', 
     start_date = datetime(2026, 6, 25),
@@ -45,17 +35,18 @@ def raw_api_to_gcs():
     # Split into separate DAGS because pulling target crags doesn't update at the same time
     start = EmptyOperator(task_id="start_pipeline")
     
-    resolve_gripoints = ApiToGcsOperator.partial(
+    resolve_gridpoints = ApiToGcsOperator.partial(
     task_id="resolve_gridpoints",
     hook_cls=NwsHook,
     hook_method="resolve_gridpoint",
+    push_to_xcom=True,
     ).expand(hook_method_kwargs=get_target_crags())
     
     nws_hourly_forecast = ApiToGcsOperator.partial(
     task_id="ingest_nws_hourly_forecast",
     hook_cls=NwsHook,
     hook_method="get_hourly_forecast",
-    ).expand(hook_method_kwargs=get_distinct_gridpoints())
+    ).expand(hook_method_kwargs=resolve_gridpoints.output)
 
     gridpoints_gcs_to_bq = GCSToBigQueryOperator(
         task_id="gridpoints_gcs_to_bq",
@@ -82,12 +73,14 @@ def raw_api_to_gcs():
         autodetect=False,
         schema_fields=[
             {"name":"data","type":"JSON","mode":"REQUIRED"},
-            {"name":"extracted_at_ts","type":"TIMESTAMP","mode":"REQUIRED"}
+            {"name":"extracted_at_ts","type":"TIMESTAMP","mode":"REQUIRED"}, 
+            {"name":"area_id","type":"STRING","mode":"REQUIRED"}
         ],
         write_disposition="WRITE_APPEND",
     )
 
-    start >> resolve_gripoints >> gridpoints_gcs_to_bq >> nws_hourly_forecast >> nws_hourly_forecast_gcs_to_bq
+    start >> resolve_gridpoints >> gridpoints_gcs_to_bq
+    resolve_gridpoints >> nws_hourly_forecast >> nws_hourly_forecast_gcs_to_bq
 
 
 

@@ -1,4 +1,4 @@
-with source as (select * from {{ source("raw_data", "raw_graph_ql_areas") }})
+with source as (select * from {{ source("raw_data", "raw_open_beta_areas") }})
 
 select
     uuid as id,

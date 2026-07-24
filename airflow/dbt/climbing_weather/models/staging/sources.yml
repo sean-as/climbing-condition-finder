@@ -8,7 +8,7 @@ sources:
     tables:
       - name: raw_nws
         description: One record per location and updated hourly forecast per hour. 
-      - name: raw_graph_ql_countries
+      - name: raw_open_beta_countries
         description: One record per counry found in the Open Beta Graph QL. 
-      - name: raw_graph_ql_areas
+      - name: raw_open_beta_areas
         description: One record per area found in the Open Beta Graph QL. 
