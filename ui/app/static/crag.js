@@ -19,7 +19,7 @@ fetch(`/api/areas/${areaId}`)
             return;
         }
         for (const [metric, seriesList] of metrics) {
-            renderChart(el, metric, seriesList);                // one chart per metric
+            renderChart(el, metric, seriesList);                // one chart per metric, climb_score first (dict order)
         }
     } catch (e) {
         document.getElementById("error").hidden = false;
@@ -28,18 +28,21 @@ fetch(`/api/areas/${areaId}`)
 })();
 
 function renderChart(container, metric, seriesList) {
+    const isScore = metric === "climb_score";
+
     const box = document.createElement("div");
-    box.className = "chart-box";
+    box.className = isScore ? "chart-box climb-score-box" : "chart-box";
     const canvas = document.createElement("canvas");
     box.appendChild(canvas);
     container.appendChild(box);
-    container.appendChild(canvas);
 
     const datasets = seriesList.map(s => ({
         label: s.label ?? s.source,                    // identity
         data: s.points.map(p => ({ x: p.t, y: p.v })), // time-series
-        borderWidth: 2, pointRadius: 0, lineTension: 0.3,
-
+        borderWidth: isScore ? 3 : 2, pointRadius: 0, lineTension: 0.3,
+        borderColor: isScore ? "#2e7d32" : undefined,
+        fill: isScore,
+        backgroundColor: isScore ? "rgba(46,125,50,0.12)" : undefined,
     }));
 
     new Chart(canvas, {
@@ -73,10 +76,13 @@ function renderChart(container, metric, seriesList) {
                     },
                     grid: { color: "rgba(0,0,0,0.06)" },
                 },
-                y: { grid: { color: "rgba(0,0,0,0.06)" } },
+                y: {
+                    grid: { color: "rgba(0,0,0,0.06)" },
+                    ...(isScore ? { min: 0, max: 100 } : {}),
+                },
             },             // shared time axis
             plugins: {
-                title: { display: true, text: metric },
+                title: { display: true, text: isScore ? "Climb Score" : metric },
                 legend: { display: seriesList.length > 1 },
                 tooltip: {
                     callbacks: {

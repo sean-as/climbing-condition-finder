@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 requires-python = ">=3.10,<3.13"
 dependencies = [
-    "google-cloud-storage (>=3.10,<4.0.0)",
+    "google-cloud-storage (>=2.4,<3.2)",
     "requests (>=2.34.2,<3.0.0)",
     "apache-airflow (==2.11.2)",
     "psycopg2-binary (>=2.9.12,<3.0.0)",
@@ -13,7 +13,9 @@ dependencies = [
     "pydantic (>=2.13.4,<3.0.0)",
     "fastapi (>=0.139.0,<0.140.0)",
     "uvicorn (>=0.51.0,<0.52.0)",
-    "jinja2 (>=3.1.6,<4.0.0)"
+    "jinja2 (>=3.1.6,<4.0.0)",
+    "astronomer-cosmos (>=1.15.1,<2.0.0)",
+    "dbt-bigquery (>=1.12.0,<2.0.0)"
 ]
 
 [tool.poetry]

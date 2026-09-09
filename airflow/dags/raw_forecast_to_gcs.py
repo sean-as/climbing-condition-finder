@@ -5,6 +5,7 @@ from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQue
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 from datetime import datetime
 from airflow.operators.empty import EmptyOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
 @task
 def get_target_crags():
@@ -81,8 +82,13 @@ def raw_api_to_gcs():
         write_disposition="WRITE_APPEND",
     )
 
+    trigger_dbt = TriggerDagRunOperator(
+      task_id="trigger_dbt_run",
+      trigger_dag_id="dbt_run",       # must match dag_id in your dbt_run.py DbtDag
+      wait_for_completion=False,       # True if you want ingestion DAG to block until dbt finishes
+    )
     start >> resolve_gridpoints >> gridpoints_gcs_to_bq
-    resolve_gridpoints >> nws_hourly_forecast >> nws_hourly_forecast_gcs_to_bq
+    resolve_gridpoints >> nws_hourly_forecast >> nws_hourly_forecast_gcs_to_bq >> trigger_dbt
 
 
 

@@ -5,6 +5,7 @@ from services.bq_client import get_client
 
 
 METRICS = {
+    "climb_score":        [("score", "climb_score",                   None)],
     "temperature":        [("nws", "temperature_value",               "temperature_unit")],
     "wind_speed":         [("low",  "wind_speed_low",  "wind_speed_unit"),
                            ("high", "wind_speed_high", "wind_speed_unit")],   # 2 lines, 1 chart
@@ -14,7 +15,7 @@ METRICS = {
 }
 
 QUERY = """
-  select start_time, temperature_value, temperature_unit,
+  select start_time, climb_score, temperature_value, temperature_unit,
          wind_speed_low, wind_speed_high, wind_speed_unit,
          precipitation_probability_value, precipitation_probability_unit,
          relative_humidity_value, relative_humidity_unit,
@@ -38,7 +39,7 @@ def get_forecast(area_id: str) -> ForecastResponse:
             Series(
                 source="nws",
                 label=label,
-                unit=(rows[0][unit_col] if rows else None),
+                unit=(rows[0][unit_col] if rows and unit_col else None),
                 points=[Point(t=r["start_time"], v=r[value_col]) for r in rows],
             )
             for (label, value_col, unit_col) in specs
