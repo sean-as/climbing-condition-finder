@@ -16,14 +16,14 @@
     
     100
     * (1 - coalesce({{ precip }}, 0) / 100)
-    * (
+    * ((
             case
                 when {{ temp }} between {{ temp_ideal_low }} and {{ temp_ideal_high }} then 1.0
-                when {{ temp }} <= {{ temp_cutoff_low }} or {{ temp_cutoff_high }} >= {{ temp }} then 0.0
+                when {{ temp }} <= {{ temp_cutoff_low }} or {{ temp }} >= {{ temp_cutoff_high }}  then 0.0
                 when {{ temp }} < {{ temp_ideal_low }} then {{ ramp(temp, temp_cutoff_low, temp_ideal_low) }}
                 when {{ temp }} > {{ temp_ideal_high }} then {{ ramp(temp, temp_cutoff_high, temp_ideal_high) }}
             end
-        )
+        ) * {{ w_temp }})
       + {{ w_wind }}  * least({{ ramp(wind, wind_cutoff, wind_ideal) }}, {{ ramp(wind, 3, wind_ideal) }})
       + {{ w_humid }} * {{ ramp(humid, humidity_cutoff, 0) }}
 {% endmacro %}

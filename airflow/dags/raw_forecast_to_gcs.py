@@ -30,7 +30,6 @@ def get_target_crags():
     tags=["raw"],
 )
 def raw_api_to_gcs():
-    # TODO Placeholder to pull locations to dynamically create dag
     # Phase 1: Do LA Basin (5da0e075-8ec5-5ad3-8136-49a5d4dacaa5) and San Jacinto Mountains (7197701e-a308-5315-afe9-b29ace8a8565)
     # Split into separate DAGS because pulling target crags doesn't update at the same time
     start = EmptyOperator(task_id="start_pipeline")

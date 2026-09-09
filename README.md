@@ -2,7 +2,7 @@
 
 ## Overview
 
-A data pipeline and dashboard that answers "is Bishop climbable this weekend?", generating a conditon_score for each area and forecast based on temperature, precipitations, wind, and humidity levels. Rather than trusting a single forecast, there are multiple sources (NWS, open weather, etc.) and then eventually comparing against actual conditions. 
+A data pipeline and dashboard that answers "is Bishop climbable this weekend?", generating a conditon_score for each area and forecast based on temperature, precipitation, wind, and humidity levels. Rather than trusting a single forecast, there are multiple sources (NWS, open weather, etc.) and then eventually comparing against actual conditions. 
 
 ## Stack
 - **Orchestration:** Airflow
@@ -11,7 +11,7 @@ A data pipeline and dashboard that answers "is Bishop climbable this weekend?", 
 - **Transformations:** dbt 
 - **Dashboard:** FastAPI, ChartJS
 
-## Projects Strucutre
+## Projects Structure
 - **airflow**: Contains the airflow and dbt code
 - **ui**: Contains the FastAPI App to for the UI
 - **terraform**: contains the infrastructure that is created
@@ -121,14 +121,14 @@ flowchart TD
 
 | Phase | Deliverable | Status
 |---|---|---|
-| 1 | Run airflow locally using docker, set up intiial DBT models for NWS data and create condition_score, learn more about FastAPI to begin setting up UI | DONE
+| 1 | Run airflow locally using docker, set up intial DBT models for NWS data and create condition_score, learn more about FastAPI to begin setting up UI | DONE
 | 2 | Updated models to be incremental (forecast and areas). Remove get_distinct_gridpoints from ingestion of NWS to reduce BQ calls. Ensure naming patterns are aligned, rename openbeta to open_beta.  Refine Charts in UI to make them more useable. Enable DBT to run in airflow. Resolve any other TODOs in codebase. | IN-PROGRESS
 | 3 | Add unit tests for airflow. Add second source Open Weather API. | TODO
-| 4 | Deploy Airflow to cloud so it's updated more regularly. Add source for actualy temperature, humidity readings to compare models to forecast. | TODO
+| 4 | Deploy Airflow to cloud so it's updated more regularly. Add source for actually temperature, humidity readings to compare models to forecast. | TODO
 | 5 | Deploy UI to cloud run and set up appropriately in Terraform. | TODO
 
 Considerations: 
-- FastAPI is slow with BQ queriy: BQ is meant for analytics so there is a couple second latency with page loading. Caching helps but alternatives are better. Things to consider: BQ to DuckDB file (could use up a lot of memory), Redis and Firestore (potentially overkill). 
+- FastAPI is slow with BQ query: BQ is meant for analytics so there is a couple second latency with page loading. Caching helps but alternatives are better. Things to consider: BQ to DuckDB file (could use up a lot of memory), Redis and Firestore (potentially overkill). 
 
 
 
