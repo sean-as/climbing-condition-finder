@@ -1,0 +1,7 @@
+sources:
+  - name: nws
+    schema: "{{ env_var('DBT_RAW_SCHEMA', 'climbing_weather') }}"
+    description: Raw Data for Climbing Weather
+    tables:
+      - name: raw_nws
+        description: One record per location and updated hourly forecast per hour. 

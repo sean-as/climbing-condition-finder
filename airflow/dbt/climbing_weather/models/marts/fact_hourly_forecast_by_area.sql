@@ -1,7 +1,7 @@
 with source as (select * from {{ ref("int_forecast_hourly_by_area") }})
 select
     area_id,
-    extracted_at_ts,
+    ingested_at_ts,
     generated_at,
     elevation_value,
     elevation_unit,

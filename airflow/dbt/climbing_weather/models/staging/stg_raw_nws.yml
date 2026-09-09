@@ -6,8 +6,10 @@ models:
         description: "Gridpoint cell polygon (GeoJSON) — spatial join key to areas."
       - name: generated_at
         description: "When NWS generated this forecast."
-      - name: extracted_at_ts
-        description: "When the row was ingested (forecast_made_at for snapshotting)."
+      - name: ingested_at_ts
+        description: "UTC time the row was written to GCS."
+      - name: airflow_run_ts
+        description: "Airflow logical run timestamp in UTC."
       - name: valid_period
         description: "NWS validTimes window the forecast covers."
       - name: elevation_value

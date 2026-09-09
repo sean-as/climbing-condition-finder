@@ -1,5 +1,6 @@
 from airflow.models import BaseOperator
 from google.cloud import storage
+from datetime import datetime, timezone
 import json
 
 class ApiToGcsOperator(BaseOperator):
@@ -33,10 +34,11 @@ class ApiToGcsOperator(BaseOperator):
     def execute(self, context):
         hook = self.hook_cls(**(self.hook_kwargs or {}))
         data = getattr(hook, self.hook_method)(**(self.hook_method_kwargs or {}))  
+        ingested_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
         if isinstance(data, list):
-            json_str = "\n".join(json.dumps(obj) for obj in data)
+            json_str = "\n".join(json.dumps({**obj, "airflow_run_ts": context["ts"], "ingested_at_ts": ingested_at}) for obj in data)
         else:
-            json_str = json.dumps(data)
+            json_str = json.dumps({**data, "airflow_run_ts": context["ts"], "ingested_at_ts": ingested_at})
         idx = context["ti"].map_index
         self.upload_to_gcs(json_str, f"raw_api/{hook.source_name}/{self.task_id}_{idx}_{context['ts_nodash']}.json")
         if self.push_to_xcom: 

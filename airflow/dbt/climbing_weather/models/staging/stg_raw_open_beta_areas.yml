@@ -4,6 +4,7 @@ models:
     columns:
       - name: id
         description: "Unique identifier for the area"
+        tests: [unique]
       - name: area_name
         description: "The name of the climbing area."
       - name: latitude
@@ -18,6 +19,10 @@ models:
         description: "Hierarchial list of areas from the root to the current area."
       - name: is_leaf
         description: "True if the area is a terminal node (a crag with routes and no child areas); false if it is a parent area that only contains sub-areas."
+      - name: ingested_at_ts
+        description: "UTC time the row was written to GCS."
+      - name: airflow_run_ts
+        description: "Airflow logical run timestamp in UTC."
     tests:
       - dbt_utils.expression_is_true:
           name: ancestors_last_element_is_self

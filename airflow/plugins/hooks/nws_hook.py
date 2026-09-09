@@ -1,7 +1,5 @@
 import requests
 from airflow.hooks.base import BaseHook
-from datetime import datetime, timezone
-import json
 class NwsHook(BaseHook): 
 
     source_name = "nws"
@@ -38,7 +36,7 @@ class NwsHook(BaseHook):
             data = response.json()
             self.log.info(f"Succesfully fetched forecast for area_id: {area_id}")
         # TODO Catch KeyError or TypeError, catch no forecast
-            return {"data": data, "extracted_at_ts": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'), "area_id": area_id}
+            return {"data": data, "area_id": area_id}
         except requests.exceptions.RequestException: 
              self.log.exception(f"NWS forecast request failed for grid_id={grid_id}, grid_x={grid_x}, grid_y={grid_y}")
              raise

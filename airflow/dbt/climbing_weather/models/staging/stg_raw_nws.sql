@@ -1,8 +1,8 @@
 with
-    source as (select * from {{ source("raw_data", "raw_nws") }}),
+    source as (select * from {{ source("nws", "raw_nws") }}),
     unnested as (
         select
-            extracted_at_ts,
+            ingested_at_ts,
             json_value(data, '$.properties.generatedAt') as generated_at,
             json_query(data, '$.geometry') as geo_json,
             json_value(data, '$.properties.elevation.value') as elevation_value,
@@ -13,7 +13,7 @@ with
     ),
     typed as (
         select
-            extracted_at_ts,
+            ingested_at_ts,
             generated_at,
             geo_json,
             cast(elevation_value as numeric) as elevation_value,

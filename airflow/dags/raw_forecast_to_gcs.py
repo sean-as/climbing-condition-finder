@@ -59,7 +59,9 @@ def raw_api_to_gcs():
             {"name": "area_id",     "type": "STRING",    "mode": "REQUIRED"},
             {"name": "grid_id",     "type": "STRING",    "mode": "NULLABLE"},
             {"name": "grid_x",      "type": "INTEGER",   "mode": "NULLABLE"},
-            {"name": "grid_y",      "type": "INTEGER",   "mode": "NULLABLE"}
+            {"name": "grid_y",      "type": "INTEGER",   "mode": "NULLABLE"}, 
+            {"name": "airflow_run_ts", "type": "TIMESTAMP", "mode": "REQUIRED"}, 
+            {"name": "ingested_at_ts", "type": "TIMESTAMP", "mode": "REQUIRED"}
         ],
         write_disposition="WRITE_APPEND",
     )
@@ -73,7 +75,8 @@ def raw_api_to_gcs():
         autodetect=False,
         schema_fields=[
             {"name":"data","type":"JSON","mode":"REQUIRED"},
-            {"name":"extracted_at_ts","type":"TIMESTAMP","mode":"REQUIRED"}, 
+            {"name": "airflow_run_ts", "type": "TIMESTAMP", "mode": "REQUIRED"}, 
+            {"name": "ingested_at_ts", "type": "TIMESTAMP", "mode": "REQUIRED"},
             {"name":"area_id","type":"STRING","mode":"REQUIRED"}
         ],
         write_disposition="WRITE_APPEND",

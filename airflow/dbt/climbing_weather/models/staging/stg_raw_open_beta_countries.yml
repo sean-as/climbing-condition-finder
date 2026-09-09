@@ -4,3 +4,8 @@ models:
     columns:
       - name: country
         description: "Country names."
+        tests: [unique]
+      - name: ingested_at_ts
+        description: "UTC time the row was written to GCS."
+      - name: airflow_run_ts
+        description: "Airflow logical run timestamp in UTC."

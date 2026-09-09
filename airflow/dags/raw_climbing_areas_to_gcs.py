@@ -21,22 +21,36 @@ def raw_climbing_areas_to_gcs():
         task_id='raw_open_beta_areas_gcs_to_bq', 
         bucket='climbing-weather-499816-raw-weather', 
         source_format="NEWLINE_DELIMITED_JSON",
-        source_objects = ["raw_api/open_beta/ingest_open_beta_areas*.json"], # TODO Make this incremental only do newly fetched data
+        source_objects = ["raw_api/open_beta/ingest_open_beta_areas_*_{{ ts_nodash }}.json"],
         destination_project_dataset_table = "climbing_weather.raw_open_beta_areas",
         autodetect=False,
-        schema_fields=[{"name": "uuid", "type": "STRING", "mode": "REQUIRED"}, {"name": "area_name", "type": "STRING", "mode": "REQUIRED"}, {"name": "areaName", "type": "STRING", "mode": "REQUIRED"}, {"name": "pathTokens", "type": "STRING", "mode": "REPEATED"}, {"name": "ancestors", "type": "STRING", "mode": "REPEATED"}, {"name": "children", "type": "JSON"}, {"name": "metadata", "type": "JSON", "mode": "REQUIRED"}],
-        write_disposition="WRITE_TRUNCATE",
+        schema_fields=[
+            {"name": "uuid", "type": "STRING", "mode": "REQUIRED"},
+            {"name": "area_name", "type": "STRING", "mode": "REQUIRED"},
+            {"name": "areaName", "type": "STRING", "mode": "REQUIRED"},
+            {"name": "pathTokens", "type": "STRING", "mode": "REPEATED"},
+            {"name": "ancestors", "type": "STRING", "mode": "REPEATED"}, 
+            {"name": "children", "type": "JSON"}, 
+            {"name": "metadata", "type": "JSON", "mode": "REQUIRED"}, 
+            {"name": "airflow_run_ts", "type": "TIMESTAMP", "mode": "REQUIRED"}, 
+            {"name": "ingested_at_ts", "type": "TIMESTAMP", "mode": "REQUIRED"},
+        ],
+        write_disposition="WRITE_APPEND",
     )
 
     countries_gcs_to_bq_operator = GCSToBigQueryOperator(
         task_id='raw_open_beta_countries_gcs_to_bq', 
         bucket='climbing-weather-499816-raw-weather', 
         source_format="NEWLINE_DELIMITED_JSON",
-        source_objects = ["raw_api/open_beta/ingest_open_beta_countries_*.json"], # TODO Make this incremental only do newly fetched data
+        source_objects = ["raw_api/open_beta/ingest_open_beta_countries_*_{{ ts_nodash }}.json"], 
         destination_project_dataset_table = "climbing_weather.raw_open_beta_countries",
         autodetect=False,
-        schema_fields=[{"name": "areaName", "type": "STRING", "mode": "REQUIRED"}],
-        write_disposition="WRITE_TRUNCATE",
+        schema_fields=[
+            {"name": "areaName", "type": "STRING", "mode": "REQUIRED"},
+            {"name": "airflow_run_ts", "type": "TIMESTAMP", "mode": "REQUIRED"}, 
+            {"name": "ingested_at_ts", "type": "TIMESTAMP", "mode": "REQUIRED"}
+        ],
+        write_disposition="WRITE_APPEND",
     )
     open_beta_areas_to_gcs_operator >> areas_gcs_to_bq_operator
     open_beta_countries_to_gcs_operator >> countries_gcs_to_bq_operator 

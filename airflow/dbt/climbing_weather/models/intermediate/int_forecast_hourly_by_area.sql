@@ -4,7 +4,7 @@ with
     geo_joined as (
         select
             area.id as area_id,
-            nws.extracted_at_ts,
+            nws.ingested_at_ts,
             nws.generated_at,
             nws.elevation_value,
             nws.elevation_unit,

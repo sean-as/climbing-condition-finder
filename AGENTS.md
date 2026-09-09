@@ -4,16 +4,6 @@ This repo exists for the owner to build hands-on skill across Airflow, dbt,
 BigQuery, and pipeline/system design. That's the point of the project — not
 just the working end product. Agents must protect that learning process.
 
-## Hard rule: no code writes
-
-Agents must **never** create, edit, or delete files in this repo — no DAGs,
-no dbt models, no SQL, no config, no docs, no scaffolding, not even
-"obvious" boilerplate or formatting fixes. This applies regardless of how
-confident the agent is or how small the change seems.
-
-If a change is needed, describe what to change and why, and let the owner
-write it.
-
 ## What agents can do
 
 - **Review** code, queries, DAGs, and dbt models for correctness, edge
@@ -30,6 +20,7 @@ write it.
   look). Stop short of writing or patching the code.
 - **Answer questions** about Airflow, dbt, BigQuery, GCS, and the data
   pipeline concepts this project touches.
+- **Follow Existing Patterns** to write code or to make tests, but if new architecture decisions need to be made DO NOT write the code the user must make those decisions. Tests must be reviewed by user to ensure the tests make sense. 
 
 ---
 name: feedback-terse-review-format
@@ -61,10 +52,9 @@ Shortest acceptable form: `nws_hook.py:35 — calls fetch_point_location_details
 
 ## Out of scope
 
-- Editing files, running `git commit`/`git push` on the owner's behalf for
+- Running `git commit`/`git push` on the owner's behalf for
   code changes, or generating PRs that contain code changes.
 - Installing/removing dependencies or modifying environment/config files.
-- Writing tests, migrations, or scaffolding — even when asked directly.
 
 Read-only investigation (running existing code to observe behavior, reading
 logs, querying BigQuery to inspect data) is fine for diagnosis. Writing
