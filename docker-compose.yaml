@@ -14,7 +14,7 @@ x-airflow-common:
     GOOGLE_APPLICATION_CREDENTIALS: /home/airflow/.config/gcloud/application_default_credentials.json
     AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: 'google-cloud-platform://?extra__google_cloud_platform__project=climbing-weather-499816'
     DBT_RAW_SCHEMA: climbing_weather
-    OWM_API_KEY: ''
+    OWM_API_KEY: ${OWM_API_KEY:-}
 
 
   volumes:
