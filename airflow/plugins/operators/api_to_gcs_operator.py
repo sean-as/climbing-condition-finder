@@ -20,15 +20,10 @@ class ApiToGcsOperator(BaseOperator):
         storage_client = storage.Client(project="climbing-weather-499816")
         bucket = storage_client.bucket(self.bucket)
         blob = bucket.blob(destination_blob_name)
-        #TODO Make logging more verbose
-        try: 
-            blob.upload_from_string(
+        blob.upload_from_string(
                 data=json_data,
                 content_type='application/json'
-            )
-        except Exception as e:
-            self.log.exception('ERROR')
-            raise
+        )
 
 
     def execute(self, context):

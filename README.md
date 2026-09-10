@@ -122,7 +122,7 @@ flowchart TD
 | Phase | Deliverable | Status
 |---|---|---|
 | 1 | Run airflow locally using docker, set up intial DBT models for NWS data and create condition_score, learn more about FastAPI to begin setting up UI | DONE
-| 2 | Updated models to be incremental (forecast and areas). Remove get_distinct_gridpoints from ingestion of NWS to reduce BQ calls. Ensure naming patterns are aligned, rename openbeta to open_beta.  Refine Charts in UI to make them more useable. Enable DBT to run in airflow. Resolve any other TODOs in codebase. | IN-PROGRESS
+| 2 | Updated forecast model to be incremental (areas stayed full-refresh, low volume/weekly). Removed get_distinct_gridpoints from ingestion of NWS to reduce BQ calls. Ensured naming patterns are aligned, renamed openbeta to open_beta. Added climb_score chart to UI. Enabled DBT to run in airflow via Astronomer Cosmos. Resolved TODOs in codebase (remaining: static GCS project string, hardcoded OpenBeta endpoint - deferred to Phase 3 multi-source work). | DONE
 | 3 | Add unit tests for airflow. Add second source Open Weather API. | TODO
 | 4 | Deploy Airflow to cloud so it's updated more regularly. Add source for actually temperature, humidity readings to compare models to forecast. | TODO
 | 5 | Deploy UI to cloud run and set up appropriately in Terraform. | TODO

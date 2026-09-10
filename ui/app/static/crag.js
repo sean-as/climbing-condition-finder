@@ -1,10 +1,4 @@
 const areaId = document.body.dataset.areaId;
-const nameEl = document.getElementById("area-name");
-
-fetch(`/api/areas/${areaId}`)
-  .then(r => (r.ok ? r.json() : null))
-  .then(a => { nameEl.textContent = a?.node?.area_name ?? "Forecast"; })
-  .catch(() => { nameEl.textContent = "Forecast"; });
 
 (async () => {
     const el = document.getElementById("charts");

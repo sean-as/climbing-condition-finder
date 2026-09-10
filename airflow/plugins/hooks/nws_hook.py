@@ -19,15 +19,21 @@ class NwsHook(BaseHook):
             response = requests.get(url)
             response.raise_for_status()
             data = response.json()
-            grid_id = data["properties"]["gridId"]
-            grid_x = data["properties"]["gridX"]
-            grid_y = data["properties"]["gridY"]
-            return {"area_id": area_id, "grid_id":grid_id, "grid_x":grid_x, "grid_y":grid_y}
-        # TODO Catch KeyError or TypeError
         except requests.exceptions.RequestException:
-             self.log.exception(f"NWS point location request failed for lat={lat}, long={long}")
-             raise
-            
+            self.log.exception(f"NWS point location request failed for lat={lat}, long={long}")
+            raise
+
+        try:
+            return {
+                "area_id": area_id,
+                "grid_id": data["properties"]["gridId"],
+                "grid_x": data["properties"]["gridX"],
+                "grid_y": data["properties"]["gridY"],
+            }
+        except (KeyError, TypeError):
+            self.log.error(f"Unexpected NWS response shape for lat={lat}, long={long}: {data}")
+            raise
+
     def get_hourly_forecast(self, grid_id, grid_x, grid_y, area_id) -> dict: 
         url = f"{self.grid_point_api}{grid_id}/{grid_x},{grid_y}/forecast/hourly"
         try:
@@ -35,8 +41,14 @@ class NwsHook(BaseHook):
             response.raise_for_status()
             data = response.json()
             self.log.info(f"Succesfully fetched forecast for area_id: {area_id}")
-        # TODO Catch KeyError or TypeError, catch no forecast
-            return {"data": data, "area_id": area_id}
         except requests.exceptions.RequestException: 
              self.log.exception(f"NWS forecast request failed for grid_id={grid_id}, grid_x={grid_x}, grid_y={grid_y}")
              raise
+
+        try:
+            if not data.get("properties", {}).get("periods"):
+                raise ValueError("no forecast periods returned")
+            return {"data": data, "area_id": area_id}
+        except (KeyError, TypeError, ValueError):
+            self.log.error(f"Unexpected/empty NWS forecast for area_id={area_id}, grid_id={grid_id}: {data}")
+            raise

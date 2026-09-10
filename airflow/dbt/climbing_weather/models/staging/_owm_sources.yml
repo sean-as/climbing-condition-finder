@@ -1,0 +1,7 @@
+sources:
+  - name: owm
+    schema: "{{ env_var('DBT_RAW_SCHEMA', 'climbing_weather') }}"
+    description: Raw Data for Climbing Weather
+    tables:
+      - name: raw_owm
+        description: One record per area per 3-hourly forecast period from OpenWeatherMap.

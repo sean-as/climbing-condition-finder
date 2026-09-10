@@ -1,0 +1,33 @@
+models:
+  - name: stg_raw_owm
+    description: "One row per area per 3-hourly forecast period from OpenWeatherMap."
+    columns:
+      - name: area_id
+        description: "Area this forecast was requested for — 1:1 (no spatial join needed, unlike NWS)."
+        tests: [not_null]
+      - name: ingested_at_ts
+        description: "UTC time the row was written to GCS."
+      - name: start_time
+        description: "Start of the 3-hour forecast period (UTC), derived from OWM's unix `dt`."
+        tests: [not_null]
+      - name: temperature_value
+        description: "Forecast temperature (requested in imperial units -> Fahrenheit)."
+        tests: [not_null]
+      - name: temperature_unit
+        description: "Temperature unit ('F')."
+      - name: relative_humidity_value
+        description: "Forecast relative humidity (percent)."
+      - name: relative_humidity_unit
+        description: "Humidity unit ('%')."
+      - name: wind_speed_value
+        description: "Forecast wind speed — OWM returns a single value, unlike NWS's low/high range."
+      - name: wind_speed_unit
+        description: "Wind speed unit ('mph')."
+      - name: precipitation_probability_value
+        description: "Probability of precipitation (percent) — OWM returns 0-1, scaled to 0-100 to match NWS."
+      - name: precipitation_probability_unit
+        description: "PoP unit ('%')."
+      - name: cloud_cover_value
+        description: "Cloud cover (percent) — sun-exposure proxy, not available from NWS."
+      - name: cloud_cover_unit
+        description: "Cloud cover unit ('%')."

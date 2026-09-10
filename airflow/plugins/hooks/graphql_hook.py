@@ -33,14 +33,14 @@ class GraphqlHook(BaseHook):
                 timeout=60,
                 )
             response.raise_for_status()
-            contries = response.json().get("data", {}).get("countries", [])
-            return contries
+            countries = response.json().get("data", {}).get("countries", [])
+            return countries
 
         except requests.exceptions.RequestException: 
             self.log.exception(f"Request Exception: Unable to fetch countries from Open Beta")
             raise
 
-    def get_areas(self) -> list: 
+    def get_areas(self): 
         import time, random
         AREAS_QUERY = """
             query GetAreas($limit: Int!, $offset: Int!) {
@@ -89,6 +89,7 @@ class GraphqlHook(BaseHook):
                     headers={"Content-Type": "application/json"},
                     timeout=60,
                     )
+                response.raise_for_status()
                 data = response.json()
                 self.log.info(f"Number of pages fetches so far: {offset / limit}")
                 areas = data.get("data", {}).get("areas", [])
@@ -99,7 +100,6 @@ class GraphqlHook(BaseHook):
                     # Last Page or no results returned break loop
                     break
             except (requests.exceptions.RequestException, requests.exceptions.JSONDecodeError): 
-                self.log.exception(response.text)
                 self.log.exception(f"Request Exception: Unable to fetch areas from Open Beta")
                 raise
         return area_list
